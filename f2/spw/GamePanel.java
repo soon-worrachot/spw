@@ -22,8 +22,13 @@ public class GamePanel extends JPanel {
 
 	public void updateGameUI(GameReporter reporter){
 		big.clearRect(0, 0, 500, 600);
-		
-		big.setColor(Color.WHITE);		
+		if(reporter.getScore() < 50){
+			big.setColor(Color.WHITE);	}
+		else if(reporter.getScore() >= 50 && reporter.getScore() < 100){
+			big.setColor(Color.YELLOW);	}	
+		else if(reporter.getScore() > 100){
+			big.setColor(Color.RED);	}
+
 		big.drawString(String.format("Score : %05d", reporter.getScore()), 390, 20);
 		for(Sprite s : sprites){
 			s.draw(big);

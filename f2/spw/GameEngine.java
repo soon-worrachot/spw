@@ -28,7 +28,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		
 		gp.sprites.add(v);
 		
-		timer = new Timer(35, new ActionListener() {
+		timer = new Timer(35 , new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -44,7 +44,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void generateEnemy(){
-		Enemy e = new Enemy((int)(Math.random()*500), 60);
+		Enemy e = new Enemy((int)(Math.random()*500), -20);
 		gp.sprites.add(e);
 		enemies.add(e);
 	}
@@ -52,6 +52,10 @@ public class GameEngine implements KeyListener, GameReporter{
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
+		}
+
+		if((score % 50) == 0){
+			difficulty *= 1.01;
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
@@ -72,6 +76,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		Rectangle2D.Double er;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
+
 			if(er.intersects(vr)){
 				die();
 				return;
@@ -91,6 +96,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_RIGHT:
 			v.move(1);
 			break;
+		case KeyEvent.VK_UP:
+			v.move2(-1);
+			break;
+		case KeyEvent.VK_DOWN:
+			v.move2(1);
+			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
@@ -100,6 +111,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	public long getScore(){
 		return score;
 	}
+
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -116,4 +128,5 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void keyTyped(KeyEvent e) {
 		//do nothing		
 	}
+
 }
