@@ -54,14 +54,14 @@ public class GameEngine implements KeyListener, GameReporter{
 			generateEnemy();
 		}
 
-		if((score % 50) == 0){
-			difficulty *= 1.01;
+		if(((score % 50) == 0) && (score != 0) ){
+			difficulty += 0.01;
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
-			e.proceed();
+			e.proceed(600);
 			
 			if(!e.isAlive()){
 				e_iter.remove();
@@ -79,6 +79,8 @@ public class GameEngine implements KeyListener, GameReporter{
 
 			if(er.intersects(vr)){
 				die();
+				e.proceed(600 - v.y);
+				gp.sprites.remove(e);
 				return;
 			}
 		}
@@ -91,20 +93,25 @@ public class GameEngine implements KeyListener, GameReporter{
 	void controlVehicle(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			v.move(-1);
+			v.move_X(-1);
 			break;
 		case KeyEvent.VK_RIGHT:
-			v.move(1);
+			v.move_X(1);
 			break;
 		case KeyEvent.VK_UP:
-			v.move2(-1);
+			v.move_Y(-1);
 			break;
 		case KeyEvent.VK_DOWN:
-			v.move2(1);
+			v.move_Y(1);
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
 			break;
+		case KeyEvent.VK_ENTER:{
+			timer.start(); 
+			score = 0;
+			break;
+			}
 		}
 	}
 

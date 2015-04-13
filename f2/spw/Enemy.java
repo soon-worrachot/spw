@@ -29,9 +29,9 @@ public class Enemy extends Sprite{
 		
 	}
 
-	public void proceed(){
+	public void proceed(int y2die){
 		y += step;
-		if(y > Y_TO_DIE){
+		if(y > y2die){
 			alive = false;
 		}
 	}
