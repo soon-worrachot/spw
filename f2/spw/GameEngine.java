@@ -13,12 +13,14 @@ import javax.swing.Timer;
 
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
-		
+	
+	public static final int DAMAGE_TO_DIE = 10;	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;	
 	
 	private Timer timer;
 	
+	private int dmg = 0;
 	private long score = 0;
 	private double difficulty = 0.1;
 	
@@ -87,7 +89,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	public void die(){
-		timer.stop();
+		if(dmg == DAMAGE_TO_DIE){
+			timer.stop();
+		}else dmg++;
 	}
 	
 	void controlVehicle(KeyEvent e) {
@@ -108,8 +112,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			difficulty += 0.1;
 			break;
 		case KeyEvent.VK_ENTER:{
-			timer.start(); 
-			score = 0;
+			reSpawn();
 			break;
 			}
 		}
@@ -119,7 +122,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		return score;
 	}
 
-	
+	public int getDamage(){
+		return dmg;
+	}
+
+	private void reSpawn(){
+		timer.start(); 
+		score = 0;
+		dmg = 0;
+		difficulty = 0.1;
+	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {
 		controlVehicle(e);
