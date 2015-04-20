@@ -12,11 +12,13 @@ public class GamePanel extends JPanel {
 	
 	private BufferedImage bi;	
 	Graphics2D big;
+	Graphics2D big2;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GamePanel() {
 		bi = new BufferedImage(500, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
+		big2 = (Graphics2D) bi.getGraphics();
 		big.setBackground(Color.BLACK);
 	}
 
@@ -31,8 +33,9 @@ public class GamePanel extends JPanel {
 		else if(reporter.getDamage() >= 10){
 			big.setColor(Color.RED);	}
 
+		big2.setColor(Color.WHITE);
 		big.drawString(String.format("Damage : %d",reporter.getDamage()), 10, 20);
-		big.drawString(String.format("Score : %05d",reporter.getScore()), 400, 20);
+		big2.drawString(String.format("Score : %05d",reporter.getScore()), 400, 20);
 		for(Sprite s : sprites){
 			s.draw(big);
 		}

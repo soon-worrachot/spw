@@ -16,6 +16,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public static final int DAMAGE_TO_DIE = 10;	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Bounty> bountys = new ArrayList<Bounty>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -51,15 +52,37 @@ public class GameEngine implements KeyListener, GameReporter{
 		enemies.add(e);
 	}
 	
+	private void generateBounty(){
+		Bounty b = new Bounty((int)(Math.random()*500), -20);
+		gp.sprites.add(b);
+		bountys.add(b);
+	}
+
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
+		}
+		if(Math.random() > 0.99){
+			generateBounty();
 		}
 
 		if(((score % 50) == 0) && (score != 0) ){
 			difficulty += 0.01;
 		}
-		
+
+		Iterator<Bounty> b_iter = bountys.iterator();
+		while(b_iter.hasNext()){
+			Bounty b = b_iter.next();
+			b.proceed(600);
+			
+			if(!b.isAlive()){
+				b_iter.remove();
+				gp.sprites.remove(b);
+				score += 10;
+			}
+		}
+
+
 		Iterator<Enemy> e_iter = enemies.iterator();
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
@@ -86,9 +109,22 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		Rectangle2D.Double bor;
+		for(Bounty b : bountys){
+			bor = b.getRectangle();
+
+			if(bor.intersects(vr)){
+				b.proceed(600 - v.y);
+				gp.sprites.remove(b);
+				return;
+			}
+		}
 	}
 	
 	public void die(){
+		if(score <= 5){
+			score = 0;
+		}else score -= 5;
 		if(dmg == DAMAGE_TO_DIE){
 			timer.stop();
 		}else dmg++;
