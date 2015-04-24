@@ -12,32 +12,39 @@ public class GamePanel extends JPanel {
 	
 	private BufferedImage bi;	
 	Graphics2D big;
-	Graphics2D big2;
+	Graphics2D damage;
+	Graphics2D score;
+	Graphics2D highscore;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 
 	public GamePanel() {
 		bi = new BufferedImage(500, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
-		big2 = (Graphics2D) bi.getGraphics();
+		damage = (Graphics2D) bi.getGraphics();
+		score = (Graphics2D) bi.getGraphics();
+		highscore = (Graphics2D) bi.getGraphics();
 		big.setBackground(Color.BLACK);
 	}
 
 	public void updateGameUI(GameReporter reporter){
-		big.clearRect(0, 0, 500, 600);
+		damage.clearRect(0, 0, 500, 600);
 		if(reporter.getDamage() < 5){
-			big.setColor(Color.WHITE);	}
+			damage.setColor(Color.WHITE);	}
 		else if(reporter.getDamage() >= 5 && reporter.getDamage() < 8){
-			big.setColor(Color.YELLOW);	}	
+			damage.setColor(Color.YELLOW);	}	
 		else if(reporter.getDamage() >= 8 && reporter.getDamage() < 10){
-			big.setColor(Color.ORANGE);	}
+			damage.setColor(Color.ORANGE);	}
 		else if(reporter.getDamage() >= 10){
-			big.setColor(Color.RED);	}
+			damage.setColor(Color.RED);	}
 
-		big2.setColor(Color.WHITE);
-		big.drawString(String.format("Damage : %d",reporter.getDamage()), 10, 20);
-		big2.drawString(String.format("Score : %05d",reporter.getScore()), 400, 20);
+		highscore.setColor(Color.WHITE);
+		score.setColor(Color.WHITE);
+
+		damage.drawString(String.format("Damage : %d",reporter.getDamage()), 10, 20);
+		score.drawString(String.format("Score : %06d",reporter.getScore()), 390, 20);
+		highscore.drawString(String.format("HighScore : %06d",reporter.getHighScore()), 176, 20);
 		for(Sprite s : sprites){
-			s.draw(big);
+			s.draw(damage);
 		}
 		
 		repaint();

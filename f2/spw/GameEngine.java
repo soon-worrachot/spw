@@ -23,6 +23,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private int dmg = 0;
 	private long score = 0;
+	private long highscore = 0;
 	private double difficulty = 0.1;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
@@ -95,6 +96,10 @@ public class GameEngine implements KeyListener, GameReporter{
 			}
 		}
 		
+		if(score > highscore){
+			highscore = score;
+		}
+
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
@@ -152,6 +157,10 @@ public class GameEngine implements KeyListener, GameReporter{
 			break;
 			}
 		}
+	}
+
+	public long getHighScore(){
+		return highscore;
 	}
 
 	public long getScore(){

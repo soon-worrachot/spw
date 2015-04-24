@@ -4,6 +4,8 @@ public interface GameReporter {
 
 	long getScore();
 
+	long getHighScore();
+
 	int getDamage();
 
 }
