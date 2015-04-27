@@ -17,6 +17,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	public static final int DAMAGE_TO_DIE = 10;	
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Bounty> bountys = new ArrayList<Bounty>();
+	private ArrayList<Regeneration> regens = new ArrayList<Regeneration>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -59,12 +60,21 @@ public class GameEngine implements KeyListener, GameReporter{
 		bountys.add(b);
 	}
 
+	private void generateRegen(){
+		Regeneration r = new Regeneration((int)(Math.random()*500), -20);
+		gp.sprites.add(r);
+		regens.add(r);
+	}
+
 	private void process(){
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
 		if(Math.random() > 0.99){
 			generateBounty();
+		}
+		if(Math.random() < 0.01){
+			generateRegen();
 		}
 
 		if(((score % 50) == 0) && (score != 0) ){
@@ -79,7 +89,17 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(!b.isAlive()){
 				b_iter.remove();
 				gp.sprites.remove(b);
-				score += 10;
+			}
+		}
+
+		Iterator<Regeneration> r_iter = regens.iterator();
+		while(r_iter.hasNext()){
+			Regeneration r = r_iter.next();
+			r.proceed(600);
+			
+			if(!r.isAlive()){
+				r_iter.remove();
+				gp.sprites.remove(r);
 			}
 		}
 
@@ -121,6 +141,21 @@ public class GameEngine implements KeyListener, GameReporter{
 			if(bor.intersects(vr)){
 				b.proceed(600 - v.y);
 				gp.sprites.remove(b);
+				score += 10;
+				return;
+			}
+		}
+
+		Rectangle2D.Double rr;
+		for(Regeneration r : regens){
+			rr = r.getRectangle();
+
+			if(rr.intersects(vr)){
+				r.proceed(600 - v.y);
+				gp.sprites.remove(r);
+				if(dmg != 0){
+					dmg -= 1;
+				}
 				return;
 			}
 		}
