@@ -18,6 +18,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private ArrayList<Bounty> bountys = new ArrayList<Bounty>();
 	private ArrayList<Regeneration> regens = new ArrayList<Regeneration>();
+	private ArrayList<BigEnemy> benemies = new ArrayList<BigEnemy>();
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -48,6 +49,12 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.start();
 	}
 	
+	private void generateBigEnemy(){
+		BigEnemy be = new BigEnemy((int)(Math.random()*500),-20);
+		gp.sprites.add(be);
+		benemies.add(be);
+
+	}
 	private void generateEnemy(){
 		Enemy e = new Enemy((int)(Math.random()*500), -20);
 		gp.sprites.add(e);
@@ -76,7 +83,10 @@ public class GameEngine implements KeyListener, GameReporter{
 		if(Math.random() < 0.01){
 			generateRegen();
 		}
-
+		if(((score % 100) == 0 )&& (score != 0)){
+			if(Math.random() > 0.999)
+			generateBigEnemy();
+		}
 		if(((score % 50) == 0) && (score != 0) ){
 			difficulty += 0.01;
 		}
@@ -115,6 +125,18 @@ public class GameEngine implements KeyListener, GameReporter{
 				score += 1;
 			}
 		}
+
+		Iterator<BigEnemy> be_iter = benemies.iterator();
+		while(be_iter.hasNext()){
+			BigEnemy be = be_iter.next();
+			be.proceed(600);
+			
+			if(!be.isAlive()){
+				be_iter.remove();
+				gp.sprites.remove(be);
+				score += 10;
+			}
+		}
 		
 		if(score > highscore){
 			highscore = score;
@@ -134,6 +156,20 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+
+		Rectangle2D.Double ber;
+		for(BigEnemy be : benemies){
+			ber = be.getRectangle();
+
+			if(ber.intersects(vr)){
+				die();
+				be.proceed(600 - v.y);
+				gp.sprites.remove(be);
+				return;
+			}
+		}
+
+
 		Rectangle2D.Double bor;
 		for(Bounty b : bountys){
 			bor = b.getRectangle();
@@ -186,6 +222,9 @@ public class GameEngine implements KeyListener, GameReporter{
 			break;
 		case KeyEvent.VK_D:
 			difficulty += 0.1;
+			break;
+		case KeyEvent.VK_SPACE :
+			score += 10;
 			break;
 		case KeyEvent.VK_ENTER:{
 			reSpawn();
