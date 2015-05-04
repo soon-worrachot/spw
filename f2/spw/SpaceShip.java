@@ -21,18 +21,18 @@ public class SpaceShip extends Sprite{
 
 	public void move_Y(int direction){
 		y += (step * direction);
-		if(y < 0)
-			y = 0;
-		if(y > 590 - height)
-			y = 590 - height;
+		if(y < 30)
+			y = 550;
+		if(y >= 600 - height)
+			y = 30;
 	}
 
 	public void move_X(int direction){
 		x += (step * direction);
-		if(x < 0)
+		if(x <= 0)
+			x = 456;
+		if(x >= 480 - width)
 			x = 0;
-		if(x > 480 - width)
-			x = 480 - width;
 	}
 
 }

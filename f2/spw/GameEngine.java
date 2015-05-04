@@ -83,12 +83,13 @@ public class GameEngine implements KeyListener, GameReporter{
 		if(Math.random() < 0.01){
 			generateRegen();
 		}
-		if(((score % 100) == 0 )&& (score != 0)){
+		if(score > 200){
 			if(Math.random() > 0.999)
 			generateBigEnemy();
 		}
 		if(((score % 50) == 0) && (score != 0) ){
-			difficulty += 0.01;
+			if(difficulty < 1){
+			difficulty += 0.01;}
 		}
 
 		Iterator<Bounty> b_iter = bountys.iterator();
@@ -220,8 +221,25 @@ public class GameEngine implements KeyListener, GameReporter{
 		case KeyEvent.VK_DOWN:
 			v.move_Y(1);
 			break;
+		case KeyEvent.VK_W:
+			v.move_X(-1);
+			v.move_Y(-1);
+			break;
+		case KeyEvent.VK_A:
+			v.move_X(-1);
+			v.move_Y(1);
+			break;
+		case KeyEvent.VK_S:
+			v.move_X(1);
+			v.move_Y(1);
+			break;
 		case KeyEvent.VK_D:
-			difficulty += 0.1;
+			v.move_X(1);
+			v.move_Y(-1);
+			break;
+		case KeyEvent.VK_ADD:
+			if(difficulty < 1){
+			difficulty += 0.1;}
 			break;
 		case KeyEvent.VK_SPACE :
 			score += 10;
