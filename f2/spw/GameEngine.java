@@ -84,7 +84,7 @@ public class GameEngine implements KeyListener, GameReporter{
 			generateRegen();
 		}
 		if(score > 200){
-			if(Math.random() > 0.999)
+			if(Math.random() > 0.995)
 			generateBigEnemy();
 		}
 		if(((score % 50) == 0) && (score != 0) ){

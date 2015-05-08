@@ -1,5 +1,10 @@
 package f2.spw;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -9,10 +14,17 @@ public class Regeneration extends Sprite{
 	public static final int Y_TO_DIE = 600;
 	
 	private int step = 12;
+	BufferedImage capsule;
 	private boolean alive = true;
 	
 	public Regeneration(int x, int y) {
-		super(x, y, 10, 20);
+		super(x, y, 20, 20);
+		try{
+			capsule = ImageIO.read(new File("f2/image/capsule.png"));
+		}
+		catch(IOException d){
+
+		}
 		
 	}
 
@@ -24,8 +36,9 @@ public class Regeneration extends Sprite{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 
 					(float)(Y_TO_DIE - y)/(Y_TO_DIE - Y_TO_FADE)));
 		}
-		g.setColor(Color.GREEN);
-		g.fillRect(x, y, width, height);
+		// g.setColor(Color.GREEN);
+		// g.fillRect(x, y, width, height);
+		g.drawImage(capsule,x,y,width,height,null);
 		
 	}
 
